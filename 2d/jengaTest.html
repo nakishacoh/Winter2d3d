@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>ZIM Physics</title>
+
+<!-- Welcome to ZIM at https://zimjs.com - Code Creativity!              	        -->
+<!-- ZIM runs on the HTML Canvas powered by JavaScript and CreateJS https://createjs.com -->
+<!-- Founded by Inventor Dan Zen - https://danzen.com - Canadian New Media Award Winner 	-->
+<!-- ZIM is free to use. You can donate to help improve ZIM at https://zimjs.com/donate 	-->
+
+<script src="https://d309knd7es5f10.cloudfront.net/createjs_1.1_min.js"></script>
+<script src="https://d309knd7es5f10.cloudfront.net/zim_10.js"></script>
+<!-- use zimjs.com/distill for minified individual functions! -->
+
+<script src="https://d309knd7es5f10.cloudfront.net/Box2dWeb-2.1.a.3.min.js"></script>
+<script src="https://d309knd7es5f10.cloudfront.net/physics_2.0.js"></script>
+
+<script>
+
+// SCALING OPTIONS
+// scaling can have values as follows with full being the default
+// "fit"	sets canvas and stage to dimensions and scales to fit inside window size
+// "outside"	sets canvas and stage to dimensions and scales to fit outside window size
+// "full"	sets stage to window size with no scaling
+// "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
+
+var scaling = "fit"; // this will resize to fit inside the screen dimensions
+var width = 1024;
+var height = 768;
+var color = white; // ZIM colors like green, blue, pink, faint, clear, etc. available globally
+var outerColor = black; // any HTML colors like "violet", "#333", etc. fine to use
+var assets= ["dropObject.wav", "Bovi.mp3"];
+var path= "assets/"
+var frame = new Frame(scaling, width, height, color, outerColor,assets, path, new Waiter());
+
+frame.on("ready", function() {
+    zog("ready from ZIM Frame"); // logs in console (F12 - choose console)
+
+    var stage = frame.stage;
+    var stageW = frame.width;
+    var stageH = frame.height;
+
+    // see https://zimjs.com/learn.html for video and code tutorials
+    // see https://zimjs.com/docs.html for documentation
+    // see https://zimjs.com/bits.html for 64 Interactive Media techniques
+
+    // put your code here (you can delete this sample code)
+    var rect;var rect2; var rect3; var tri; var tri2; var tri3;
+    var circle;var circle1;var circle2;var circle3;var circle4; var sq;
+    var sq2; var sq3; var base; var base2;
+
+    var physics = new Physics();
+    var pointsLabel;
+    var points = 5;
+    var currentItem = 0;
+    // var main = new Container(stageW, stageH);
+    var linear = 5;
+    var angular = 5;
+
+    intro()
+    function intro(){
+        var startBtn= new Button({
+            width:300,
+            label:"Let's Play"
+
+            }).center()
+
+            startBtn.on("click",function(){
+                startBtn.removeFrom()
+                    playGame()
+
+            })
+    }
+
+    function playGame(){
+        frame.asset("Bovi.mp3").play({loop:true, volume:.2});
+
+      // Points label
+      pointsLabel = new Label({
+          text: "Points: " + points,
+          color: white,
+          size: 50,
+          backgroundColor: blue,
+          corner: 10,
+          padding: 15
+      }).pos(750, 50, true, null);
+
+      // Objects
+        rect = new Rectangle(300,30).centerReg().center().addPhysics({linear}).cur();
+        tri = new Triangle(80,80,80,"green").center().rot(180).pos(375).addPhysics({linear}).cur();
+        tri2 = new Triangle(80,80,80,"blue").center().rot(180).addPhysics({linear}).cur();
+        tri3 = new Triangle(80,80,80,"red").center().rot(180).pos(570).addPhysics({linear}).cur();
+        // var tri4 = new Triangle(80,80,80,pink).center().rot(180).pos(615).addPhysics({linear})
+
+        circle = new Circle(30, "blue").pos(370,10).addPhysics({linear}).cur();
+        circle1 = new Circle(30, "purple").pos(400,10).addPhysics({linear}).cur();
+        circle2 = new Circle(30, "yellow").pos(480,10).addPhysics({linear}).cur();
+        circle3 = new Circle(30, "green").pos(540,10).addPhysics({linear}).cur();
+        circle4 = new Circle(30, "red").pos(600,10).addPhysics({linear}).cur();
+
+        rect2 = new Rectangle(300,30).centerReg().pos(355,10).addPhysics({linear}).cur();
+
+        rect3 = new Rectangle(300,30).centerReg().pos(356,-60).addPhysics({linear}).cur();
+        sq = new Rectangle(80,80,"red").centerReg().pos(360,-50).addPhysics({linear}).cur();
+        sq2 = new Rectangle(80,80,"blue").centerReg().pos(465,-50).addPhysics({linear}).cur();
+        sq3 = new Rectangle(80,80,"green").centerReg().pos(570, -50).addPhysics({linear}).cur();
+        // var sq4 = new Rectangle(100,100,yellow).centerReg().pos(585, -50).addPhysics({linear});
+
+        base = new Rectangle(stageW,40,green).centerReg().pos(0,0, true, true).addPhysics(false); // static
+        base2 = new Rectangle(300,40).centerReg().pos(355,610).addPhysics(false); // static
+        physics.drag();
+
+
+        base.contact(function(obj,body){
+            zog(body);
+            base.color = red;
+
+            frame.asset("dropObject.wav").play({volume:.15})
+            if(obj,body = base.contact){
+              points--;
+              if (points <= 0) {
+                  points = 0;
+                  // playGame(pointsLabel);
+
+              }
+            }
+            zog(physics.borderBottom);
+        })
+    }
+
+
+
+
+
+
+
+
+    // physics.remove(physics.borderRight);
+    // new Rectangle(10, stageW/2-50).centerReg().pos(0,0,true).addPhysics(false)
+    // new Rectangle(10, stageW/2-50).centerReg().pos(0,0,true,true).addPhysics(false)
+
+
+
+
+
+    stage.update(); // this is needed to show any changes
+
+}); // end of ready
+
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+</body>
+</html>
