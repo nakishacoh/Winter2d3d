@@ -1,0 +1,118 @@
+<html>
+	<head>
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.js"></script>
+		<script src="js/threex.domevents.js"></script>
+		<script src="js/OrbitControls.js"></script>
+
+		</script>
+		<script>
+
+
+
+					var scene;
+					var camera;
+					var renderer;
+					var container;
+					var controls;
+					var geometry;
+					var material;
+					var cube;
+					var rancol;
+
+
+
+					container = document.createElement('div');
+					document.body.appendChild( container );
+
+					scene = new THREE.Scene();
+					camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 15000 );
+					renderer = new THREE.WebGLRenderer();
+					renderer.setSize( window.innerWidth, window.innerHeight );
+					document.body.appendChild( renderer.domElement );
+
+					function getRandomColor() {
+					  var letters = '0123456789ABCDEF';
+					  var color = '0x';
+					  for (var i = 0; i < 6; i++) {
+					    color += letters[Math.floor(Math.random() * 16)];
+					  }
+					  return color;
+					}
+
+					rancol = parseInt(getRandomColor());
+					geometry = new THREE.BoxGeometry( 1, 1, 1 );
+					material = new THREE.MeshBasicMaterial( { color: rancol} );
+					cube = new THREE.Mesh( geometry, material );
+					controls = new THREE.OrbitControls(camera, renderer.domElement);
+					controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+					controls.dampingFactor = 0.25;
+					controls.screenSpacePanning = true;
+					controls.minDistance = 10;
+					controls.maxDistance = 50;
+					controls.maxPolarAngle = Math.PI / 2;
+					controls.rotate = 2.0;
+					controls.enableKeys = true;
+					controls.enablePan = true;
+
+
+					// var cube2 = new THREE.Mesh( geometry, material );
+					scene.add(cube);
+
+					camera.position.z = 5;
+
+					const domEvents = new THREEx.DomEvents(camera, renderer.domElement)
+
+					domEvents.addEventListener(cube, 'click', event => {
+						for ( var i = 0; i < 10000; i ++ ) {
+							var ranmat = new THREE.MeshBasicMaterial( { color: parseInt(getRandomColor())} );
+							var cube2 = new THREE.Mesh( geometry, ranmat );
+							 var color = new THREE.Color( 0xffffff );
+
+							cube2.position.x = 60 * ( 3.0 * Math.random() - 1.0 );
+							cube2.position.y = 60 * ( 3.0 * Math.random() - 1.0 );
+							cube2.position.z = 60 * ( 3.0 * Math.random() - 1.0 );
+							cube2.rotation.x = Math.random() * Math.PI;
+							cube2.rotation.y = Math.random() * Math.PI;
+							cube2.rotation.z = Math.random() * Math.PI;
+							scene.add(cube2);
+							}
+
+
+
+						console.log(cube);
+					})
+
+					function onWindowResize() {
+						camera.aspect = window.innerWidth / window.innerHeight;
+						camera.updateProjectionMatrix();
+						renderer.setSize( window.innerWidth, window.innerHeight );
+					}
+
+					function render() {
+						renderer.render( scene, camera );
+					}
+
+					var animate = function () {
+						requestAnimationFrame( animate );
+
+						cube.rotation.x += 0.01;
+						cube.rotation.y += 0.01;
+						controls.update();
+
+						render();
+					};
+					animate();
+
+
+
+				</script>
+			</body>
+
+</html>
